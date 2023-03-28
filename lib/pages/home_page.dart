@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 bool favoritesOnlyFlag =
     false; // TODO move inside build func and use provider.watch()
 
-class MyHomePage extends ConsumerWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
   void _navigateToNews() {
@@ -21,7 +20,7 @@ class MyHomePage extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [

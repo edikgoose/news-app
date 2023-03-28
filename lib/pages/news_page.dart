@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
-class NewsPage extends ConsumerWidget {
+class NewsPage extends StatelessWidget {
   const NewsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
 
     return Scaffold(
         body: Column(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SearchWidget extends ConsumerWidget {
+class SearchWidget extends StatelessWidget {
   const SearchWidget({super.key});
 
   void _searchPressed() {
@@ -13,7 +12,7 @@ class SearchWidget extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final myController = TextEditingController();
 
     return Scaffold(
