@@ -1,5 +1,3 @@
-import 'request.dart';
-
 class Source{
     String id;
     String name;
@@ -9,24 +7,23 @@ class Source{
     );
 }
 
-class News{
-    Source source;
-    String title;
-    String description;
-    String url;
+class NewsModel {
+    final Source source;
+    final String title;
+    final String description;
+    final String url;
     String? urlToImage;
-    String content;
+    final String content;
 
-    News(
-        this.source,
-        this.title,
-        this.description,
-        this.url,
-        this.urlToImage,
-        this.content,
-    );
+    NewsModel({
+        required this.source,
+        required this.title,
+        required this.description,
+        required this.url,
+        required this.content,
+        this.urlToImage
+    });
 }
-
 // Future<List<News>> fetchNews(Request r) async{
 //     
 // 

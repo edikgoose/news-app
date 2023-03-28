@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NewsPage extends StatelessWidget {
-  const NewsPage({super.key});
+class FullTextPage extends ConsumerWidget {
+  const FullTextPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(35, 34, 39, 1),
       appBar: AppBar(
