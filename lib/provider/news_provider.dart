@@ -3,6 +3,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:news_app/widgets/news_preview.dart';
 import '../news_model/news.dart';
+import '../news_model/request.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import "../news_model/category.dart";
+import "../news_model/countries.dart";
+
+
+
+import '../news_model/source.dart';
+
+
 
 part 'news_provider.freezed.dart';
 
@@ -29,28 +40,43 @@ class NewsNotifier extends StateNotifier<NewsState> {
 
   void loadNewsList() async{
     state = state.copyWith(isLoading: true);
+    List<NewsModel> newsList = [];
+    Future<List<NewsModel>> futureNewsList = fetchNews(Request(null, "trump", null));
+    futureNewsList.then((value){
+      newsList = value;
+      
+    }).whenComplete(() => generateNewsPreview(newsList));
+    
+  }
 
-    final testModel = NewsModel(
-      source: Source("cbs-news", "CBS News"),
-      title: "Pet insurance for cats: What to know",
-      description:
-      "Pet insurance for cats depends on a variety of factors. Here's what you should know about protecting your cat.",
-      url: "https://www.cbsnews.com/news/pet-insurance-for-cats-what-to-know/",
-      urlToImage:
-      "https://assets1.cbsnewsstatic.com/hub/i/r/2022/11/02/9bfcf26b-6f1f-4462-bfd5-6e7fb2e380da/thumbnail/1200x630/b4c10958124033d922668e6f4e812322/gettyimages-1337031863.jpg",
-      content:
-      "Pet insurance for cats depends on a variety of factors.\r\nGetty Images\r\nOwning a cat can be rewarding for pet owners, but it can also be stressful (and expensive). If your pet gets sick or has other h… [+5381 chars]",
-    );
-
+  void generateNewsPreview( List<NewsModel> news){
     List<NewsPreview> tempNews = [];
-    for (var i = 0; i < 3; i++){
-      tempNews.add(NewsPreview(newsModel: testModel));
+    for (var i = 0; i < 10; i++){
+      tempNews.add(NewsPreview(newsModel: news[i]));
     }
-
     state = state.copyWith(news: tempNews, isLoading: false);
   }
 
   void changeFavoritesOnlyFlag() {
     state = state.copyWith(favoritesOnlyFlag: !state.favoritesOnlyFlag);
   }
+
+  Future<List<NewsModel>> fetchNews(Request r) async{
+    List<NewsModel> listOfNews = [];
+    String url = makeRequestString(r);
+    var data = await http.get(Uri.parse(url));
+    if (data.statusCode == 200) {
+      var articles = jsonDecode(data.body)["articles"];
+      if (articles.length > 0){
+      for (var news in articles){
+        listOfNews.add(NewsModel.fromJson(news));
+      }
+      }
+      return listOfNews;
+
+    } else {
+    throw Exception('Loading failed');
+  }
+
+}
 }
