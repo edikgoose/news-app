@@ -16,7 +16,7 @@ class NewsPreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(_createRoute());
+        Navigator.of(context).push(_createRoute(newsModel));
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 24),
@@ -74,10 +74,10 @@ class NewsPreview extends ConsumerWidget {
   }
 }
 
-Route _createRoute() {
+Route _createRoute(NewsModel newsModel) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
-        const FullTextPage(),
+          FullTextPage(newsModel: newsModel),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(1.0, 0.0);
       const end = Offset.zero;
