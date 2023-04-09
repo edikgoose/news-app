@@ -9,11 +9,7 @@ import 'dart:convert';
 import "../news_model/category.dart";
 import "../news_model/countries.dart";
 
-
-
 import '../news_model/source.dart';
-
-
 
 part 'news_provider.freezed.dart';
 
@@ -30,29 +26,37 @@ abstract class NewsState with _$NewsState {
 }
 
 final newsProvider =
-StateNotifierProvider<NewsNotifier, NewsState>((ref) => NewsNotifier());
+    StateNotifierProvider<NewsNotifier, NewsState>((ref) => NewsNotifier());
 
 class NewsNotifier extends StateNotifier<NewsState> {
-
   NewsNotifier() : super(const NewsState()) {
     loadNewsList();
   }
 
-  void loadNewsList() async{
+  void loadNewsList() async {
     state = state.copyWith(isLoading: true);
     List<NewsModel> newsList = [];
-    Future<List<NewsModel>> futureNewsList = fetchNews(Request(null, "trump", null));
-    futureNewsList.then((value){
+    Future<List<NewsModel>> futureNewsList =
+        fetchNews(Request(null, "trump", null));
+    futureNewsList.then((value) {
       newsList = value;
-      
     }).whenComplete(() => generateNewsPreview(newsList));
-    
   }
 
-  void generateNewsPreview( List<NewsModel> news){
+  void generateNewsPreview(List<NewsModel> news) {
     List<NewsPreview> tempNews = [];
-    for (var i = 0; i < 10; i++){
-      tempNews.add(NewsPreview(newsModel: news[i]));
+    for (var i = 0; i < news.length; i++) {
+      if (news[i].content != null) {
+        if (news[i].urlToImage == null) {
+          news[i].urlToImage =
+              "https://github.com/edikgoose/news-app/tree/main/assets/images";
+        }
+        if (news[i].description == null) {
+          news[i].description = "";
+        }
+
+        tempNews.add(NewsPreview(newsModel: news[i]));
+      }
     }
     state = state.copyWith(news: tempNews, isLoading: false);
   }
@@ -61,22 +65,20 @@ class NewsNotifier extends StateNotifier<NewsState> {
     state = state.copyWith(favoritesOnlyFlag: !state.favoritesOnlyFlag);
   }
 
-  Future<List<NewsModel>> fetchNews(Request r) async{
+  Future<List<NewsModel>> fetchNews(Request r) async {
     List<NewsModel> listOfNews = [];
     String url = makeRequestString(r);
     var data = await http.get(Uri.parse(url));
     if (data.statusCode == 200) {
       var articles = jsonDecode(data.body)["articles"];
-      if (articles.length > 0){
-      for (var news in articles){
-        listOfNews.add(NewsModel.fromJson(news));
-      }
+      if (articles.length > 0) {
+        for (var news in articles) {
+          listOfNews.add(NewsModel.fromJson(news));
+        }
       }
       return listOfNews;
-
     } else {
-    throw Exception('Loading failed');
+      throw Exception('Loading failed');
+    }
   }
-
-}
 }
