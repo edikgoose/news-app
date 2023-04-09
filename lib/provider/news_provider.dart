@@ -6,10 +6,6 @@ import '../news_model/news.dart';
 import '../news_model/request.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import "../news_model/category.dart";
-import "../news_model/countries.dart";
-
-import '../news_model/source.dart';
 
 part 'news_provider.freezed.dart';
 

@@ -1,6 +1,5 @@
 import 'package:news_app/news_model/countries.dart';
 import 'package:news_app/news_model/category.dart';
-import 'package:news_app/development/env.dart';
 
 class Request{
     Country? country;
