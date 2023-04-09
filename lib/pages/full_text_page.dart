@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/constants/colors.dart';
 import 'package:news_app/news_model/news.dart';
 
 class FullTextPage extends ConsumerWidget {
@@ -11,9 +12,9 @@ class FullTextPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        backgroundColor: Color.fromRGBO(35, 34, 39, 1),
+        backgroundColor: AppColors.background,
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(35, 34, 39, 1),
+          backgroundColor: AppColors.background,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
@@ -79,7 +80,7 @@ class FullTextPage extends ConsumerWidget {
               Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.favorite_border, color: Color.fromRGBO(229, 64, 51, 1),),
+                    icon: Icon(Icons.favorite_border, color: AppColors.lightRed,),
                     onPressed: () {}, // TODO: like
                   ),
                   Text(
@@ -92,43 +93,40 @@ class FullTextPage extends ConsumerWidget {
                   )
                 ],
               ),
-              Container(
-                color: Color.fromRGBO(35, 34, 39, 1),
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16.0),
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: 10,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      padding: EdgeInsets.all(4),
-                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(50, 49, 54, 1),
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: ListTile(
-                        leading: Icon(Icons.account_circle),
-                        title: Text(
-                          'Автор комментария $index',
-                          style: TextStyle(
-                            color: Color.fromRGBO(148, 136, 204, 1),
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        subtitle: Text(
-                          'Комментарий $index',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
+              ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 10,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    padding: EdgeInsets.all(4),
+                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.lightGrey,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: ListTile(
+                      leading: Icon(Icons.account_circle),
+                      title: Text(
+                        'Автор комментария $index',
+                        style: TextStyle(
+                          color: AppColors.lightPurple,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    );
-                  },
-                ),
+                      subtitle: Text(
+                        'Комментарий $index',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),

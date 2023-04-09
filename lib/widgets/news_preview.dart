@@ -50,9 +50,9 @@ class NewsPreview extends ConsumerWidget {
                 newsModel.title,
                 maxLines: 2,
                 style: const TextStyle(
-                  color: Colors.black87,
+                  color: Colors.white,
                   fontSize: 20,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(
@@ -62,7 +62,7 @@ class NewsPreview extends ConsumerWidget {
                 newsModel.description!,
                 maxLines: 2,
                 style: const TextStyle(
-                  color: Colors.black54,
+                  color: Colors.grey,
                   fontSize: 14,
                 ),
               )

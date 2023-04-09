@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/constants/colors.dart';
 import 'package:news_app/pages/profile_page.dart';
 import 'package:news_app/provider/news_provider.dart';
+import 'package:news_app/widgets/search_bar_widget.dart';
 
 class MyHomePage extends ConsumerWidget {
   const MyHomePage({super.key});
@@ -12,27 +14,33 @@ class MyHomePage extends ConsumerWidget {
     final newsList = ref.watch(newsProvider).news;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: Colors.black45,
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).push(_createRouteProfile()),
+            icon: const Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+          ),
+          SearchBarWidget(
+              searchRequestCallback: (searchRequest) => print(searchRequest), // not implemented yet
+              settingsOpenCallback: () => print("settings")
+          ),
+          IconButton(
+            onPressed: ref.read(newsProvider.notifier).changeFavoritesOnlyFlag,
+            icon: favoritesOnlyFlag
+                ? const Icon(Icons.bookmark, color: Colors.white,)
+                : const Icon(Icons.bookmark_border, color: Colors.white),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const SizedBox(
-            height: 30,
-          ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () =>
-                    Navigator.of(context).push(_createRouteProfile()),
-                icon: const Icon(Icons.person),
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed:
-                    ref.read(newsProvider.notifier).changeFavoritesOnlyFlag,
-                icon: favoritesOnlyFlag
-                    ? const Icon(Icons.bookmark)
-                    : const Icon(Icons.bookmark_border),
-              ),
-            ],
+            height: 20,
           ),
           Expanded(
             child: ListView(
@@ -50,7 +58,7 @@ Route _createRouteProfile() {
     pageBuilder: (context, animation, secondaryAnimation) =>
         const ProfilePage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(1.0, 0.0);
+      const begin = Offset(-1.0, 0.0);
       const end = Offset.zero;
       const curve = Curves.ease;
 
