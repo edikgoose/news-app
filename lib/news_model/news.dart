@@ -1,30 +1,30 @@
-class Source{
-    String id;
-    String name;
-    Source(
-        this.id,
-        this.name,
-    );
-}
+import 'package:json_annotation/json_annotation.dart';
+import 'package:news_app/news_model/source.dart';
+part 'news.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 class NewsModel {
-    final Source source;
-    final String title;
-    final String description;
-    final String url;
+    Source source;
+    String title;
+    String? description;
+    String url;
     String? urlToImage;
-    final String content;
+    String? content;
 
     NewsModel({
         required this.source,
         required this.title,
-        required this.description,
+        this.description,
         required this.url,
-        required this.content,
+        this.content,
         this.urlToImage
     });
+    NewsModel.fromJson(Map<String, dynamic> json)
+      : source = Source.fromJson(json),
+        title = json['title'],
+        description = json['description'],
+        url = json['url'],
+        content = json['content'],
+        urlToImage = json['urlToImage'];
+    // Map<String,dynamic> toJson() => _$NewsModelToJson(this);
 }
-// Future<List<News>> fetchNews(Request r) async{
-//     
-// 
-// }
