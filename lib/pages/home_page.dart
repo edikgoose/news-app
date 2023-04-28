@@ -5,12 +5,40 @@ import 'package:news_app/pages/profile_page.dart';
 import 'package:news_app/provider/news_provider.dart';
 import 'package:news_app/widgets/search_bar_widget.dart';
 
+import '../provider/connection_provider.dart';
+
+bool disposed = false;
+
 class MyHomePage extends ConsumerWidget {
   const MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final con = ref.watch(connectivityStatusProviders).curStatus;
+    ref.read(connectivityStatusProviders.notifier).checkConnection();
+
+    if (con == Statuses.isDisonnected || con == Statuses.notDetermined) {
+      disposed = true;
+      return Scaffold(
+      backgroundColor: AppColors.background,
+
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          SizedBox(
+      width: double.infinity,
+      height: 50,
+    ),
+          Text("No internet connection", style: TextStyle(color: Colors.white, fontSize: 35),)
+        ])
+
+      );
+    } else {
+      if (disposed) {
+        disposed = false;
+      }
     final favoritesOnlyFlag = ref.watch(newsProvider).favoritesOnlyFlag;
+
     final newsList = ref.watch(newsProvider).news;
 
     return Scaffold(
@@ -50,8 +78,9 @@ class MyHomePage extends ConsumerWidget {
         ],
       ),
     );
+      }}
   }
-}
+
 
 Route _createRouteProfile() {
   return PageRouteBuilder(
@@ -71,3 +100,4 @@ Route _createRouteProfile() {
     },
   );
 }
+  
