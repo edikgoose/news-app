@@ -23,7 +23,7 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
   Widget build(BuildContext context) {
     return Flexible(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(8)),
         child: Row(
@@ -34,7 +34,7 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
               fit: FlexFit.tight,
               flex: 8,
               child: Padding(
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.only(bottom: 1),
                 child: TextField(
                   textInputAction: TextInputAction.search,
                   decoration: const InputDecoration(
