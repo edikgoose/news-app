@@ -5,6 +5,7 @@ import 'package:news_app/pages/profile_page.dart';
 import 'package:news_app/provider/news_provider.dart';
 import 'package:news_app/widgets/search_bar_widget.dart';
 
+import '../news_model/user.dart';
 import '../provider/connection_provider.dart';
 
 bool disposed = false;
@@ -85,7 +86,7 @@ class MyHomePage extends ConsumerWidget {
 Route _createRouteProfile() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
-        const ProfilePage(),
+        ProfilePage(user: User("Eduard", "Zaripov", "edikgoose", "+79279388380", "edikgoose@gmail.com")),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(-1.0, 0.0);
       const end = Offset.zero;
