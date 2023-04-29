@@ -21,72 +21,78 @@ class MyHomePage extends ConsumerWidget {
     if (con == Statuses.isDisonnected || con == Statuses.notDetermined) {
       disposed = true;
       return Scaffold(
-      backgroundColor: AppColors.background,
-
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          SizedBox(
-      width: double.infinity,
-      height: 50,
-    ),
-          Text("No internet connection", style: TextStyle(color: Colors.white, fontSize: 35),)
-        ])
-
-      );
+          backgroundColor: AppColors.background,
+          body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                ),
+                Text(
+                  "No internet connection",
+                  style: TextStyle(color: Colors.white, fontSize: 35),
+                )
+              ]));
     } else {
       if (disposed) {
         disposed = false;
       }
-    final favoritesOnlyFlag = ref.watch(newsProvider).favoritesOnlyFlag;
+      final favoritesOnlyFlag = ref.watch(newsProvider).favoritesOnlyFlag;
 
-    final newsList = ref.watch(newsProvider).news;
+      final newsList = ref.watch(newsProvider).news;
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.black45,
-        actions: [
-          IconButton(
-            onPressed: () => Navigator.of(context).push(_createRouteProfile()),
-            icon: const Icon(
-              Icons.person,
-              color: Colors.white,
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: AppBar(
+          backgroundColor: Colors.black45,
+          actions: [
+            IconButton(
+              onPressed: () =>
+                  Navigator.of(context).push(_createRouteProfile()),
+              icon: const Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
             ),
-          ),
-          SearchBarWidget(
-              searchRequestCallback: (searchRequest) => print(searchRequest), // not implemented yet
-              settingsOpenCallback: () => print("settings")
-          ),
-          IconButton(
-            onPressed: ref.read(newsProvider.notifier).changeFavoritesOnlyFlag,
-            icon: favoritesOnlyFlag
-                ? const Icon(Icons.bookmark, color: Colors.white,)
-                : const Icon(Icons.bookmark_border, color: Colors.white),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: ListView(
-              children: newsList,
+            SearchBarWidget(
+                searchRequestCallback: (searchRequest) => print(searchRequest),
+                // not implemented yet
+                settingsOpenCallback: () => print("settings")),
+            IconButton(
+              onPressed:
+                  ref.read(newsProvider.notifier).changeFavoritesOnlyFlag,
+              icon: favoritesOnlyFlag
+                  ? const Icon(
+                      Icons.bookmark,
+                      color: Colors.white,
+                    )
+                  : const Icon(Icons.bookmark_border, color: Colors.white),
             ),
-          ),
-        ],
-      ),
-    );
-      }}
+          ],
+        ),
+        body: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: ListView(
+                children: newsList,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
-
+}
 
 Route _createRouteProfile() {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>
-        ProfilePage(user: User("Eduard", "Zaripov", "edikgoose", "+79279388380", "edikgoose@gmail.com")),
+    pageBuilder: (context, animation, secondaryAnimation) => ProfilePage(
+        user: UserModel("Name", "Surname", "alias", "+77777777777",
+            "mail@gmail.com")),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(-1.0, 0.0);
       const end = Offset.zero;
@@ -101,4 +107,3 @@ Route _createRouteProfile() {
     },
   );
 }
-  
