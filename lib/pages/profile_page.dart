@@ -32,11 +32,11 @@ class ProfilePage extends ConsumerWidget {
               itemBuilder: (BuildContext context) {
                 return [
                   PopupMenuItem<String>(
-                    value: "Logout",
+                    value: 'Logout',
                     child: Row(
                       children: const [
                         Padding(padding: EdgeInsets.only(right: 10), child: Icon(Icons.logout, color: AppColors.lightGrey,)),
-                        Text("Log Out", textAlign: TextAlign.center),
+                        Text('Log Out', textAlign: TextAlign.center),
                       ],
                     ),
                   )
@@ -54,12 +54,12 @@ class ProfilePage extends ConsumerWidget {
               //   backgroundImage: AssetImage('assets/images/app_icon.png'),
               // ),
               Text(
-                "${user.name} ${user.surname}",
+                '${user.name} ${user.surname}',
                 style: const TextStyle(
                   fontSize: 40.0,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "Pacifico",
+                  fontFamily: 'Pacifico',
                 ),
               ),
               const SizedBox(

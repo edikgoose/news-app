@@ -7,4 +7,5 @@ enum SearchCategory{
     sports,
     technology,
     sources,
+    none,
 }

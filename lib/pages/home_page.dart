@@ -30,7 +30,7 @@ class MyHomePage extends ConsumerWidget {
                   height: 50,
                 ),
                 Text(
-                  "No internet connection",
+                  'No internet connection',
                   style: TextStyle(color: Colors.white, fontSize: 35),
                 )
               ]));
@@ -90,8 +90,8 @@ class MyHomePage extends ConsumerWidget {
 Route _createRouteProfile() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => ProfilePage(
-        user: UserModel("Name", "Surname", "alias", "+77777777777",
-            "mail@gmail.com")),
+        user: UserModel('Name', 'Surname', 'alias', '+77777777777',
+            'mail@gmail.com')),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(-1.0, 0.0);
       const end = Offset.zero;
