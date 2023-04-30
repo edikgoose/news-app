@@ -26,14 +26,14 @@ final newsProvider =
 
 class NewsNotifier extends StateNotifier<NewsState> {
   NewsNotifier() : super(const NewsState()) {
-    loadNewsList();
+    loadNewsList(Request(null, "Trump", null));
   }
 
-  void loadNewsList() async {
+  void loadNewsList(Request r) async {
     state = state.copyWith(isLoading: true);
     List<NewsModel> newsList = [];
     Future<List<NewsModel>> futureNewsList =
-        fetchNews(Request(null, "trump", null));
+        fetchNews(r);
     futureNewsList.then((value) {
       newsList = value;
     }).whenComplete(() => generateNewsPreview(newsList));
