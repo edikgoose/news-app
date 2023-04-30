@@ -24,7 +24,7 @@ class InfoCard extends StatelessWidget {
             style: const TextStyle(
                 color: AppColors.lightGrey,
                 fontSize: 20,
-                fontFamily: "Source Sans Pro"),
+                fontFamily: 'Source Sans Pro'),
           ),
         ),
       );

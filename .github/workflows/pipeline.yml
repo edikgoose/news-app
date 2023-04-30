@@ -1,0 +1,42 @@
+name: Android Release
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: "15.x"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.7.7"
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Formatting
+        run: dart format .
+
+      - name: Lint
+        run: dart analyze
+
+      - name: Test
+        run: dart test
+
+      - name: Start release build
+        run: flutter build apk
+
+      - name: Move apk file
+        run: cp build/app/outputs/apk/release/app-release.apk ./app-release.apk
