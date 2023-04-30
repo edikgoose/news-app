@@ -56,9 +56,8 @@ class MyHomePage extends ConsumerWidget {
               ),
             ),
             SearchBarWidget(
-                searchRequestCallback: (searchRequest) => print(searchRequest),
-                // not implemented yet
-                settingsOpenCallback: () => print("settings")),
+                searchRequestCallback: (searchRequest) => ref.read(newsProvider.notifier).loadNewsList(searchRequest),
+            ),
             IconButton(
               onPressed:
                   ref.read(newsProvider.notifier).changeFavoritesOnlyFlag,

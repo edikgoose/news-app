@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-typedef SearchCallback = void Function(String searchText);
+import '../news_model/category.dart';
+import '../news_model/request.dart';
+
+typedef SearchCallback = void Function(Request request);
 typedef SettingsCallback = void Function();
+typedef SetCategoryCallback = void Function(SearchCategory category);
+
 
 class SearchBarWidget extends ConsumerStatefulWidget {
   final SearchCallback searchRequestCallback;
-  final SettingsCallback settingsOpenCallback;
 
-  const SearchBarWidget({required this.searchRequestCallback, required this.settingsOpenCallback,
-      super.key});
+  const SearchBarWidget({required this.searchRequestCallback, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -18,7 +21,7 @@ class SearchBarWidget extends ConsumerStatefulWidget {
 
 class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
   String _content = "";
-
+  SearchCategory _category = SearchCategory.general;
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -48,7 +51,7 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
                     });
                   },
                   onSubmitted: (value) {
-                    widget.searchRequestCallback(value);
+                    widget.searchRequestCallback(Request(null, _content, _category));
                   },
                 ),
               ),
@@ -59,7 +62,7 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
               child: IconButton(
                   padding: EdgeInsets.zero,
                   onPressed: () async {
-                    widget.searchRequestCallback(_content);
+                    widget.searchRequestCallback(Request(null, _content, _category));
                   },
                   icon: const Icon(Icons.search_sharp)),
             ),
@@ -68,7 +71,10 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
               fit: FlexFit.tight,
               child: IconButton(
                 onPressed: () {
-                  widget.settingsOpenCallback();
+                  _showCategoryChoiceDialog((category) {
+                    _category = category;
+                    widget.searchRequestCallback(Request(null, _content, _category));
+                  });
                 },
                 icon: const Icon(Icons.settings_outlined),
                 padding: EdgeInsets.zero,
@@ -78,5 +84,22 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
         ),
       ),
     );
+  }
+
+  Future<void> _showCategoryChoiceDialog(SetCategoryCallback setCategoryCallback) async {
+    await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog( // <-- SEE HERE
+            title: const Text('Select category'),
+            children: SearchCategory.values.map((category) => SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop();
+                setCategoryCallback(category);
+              },
+              child: Text(category.name),
+            )).toList()
+          );
+        });
   }
 }
