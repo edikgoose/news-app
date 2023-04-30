@@ -1,4 +1,4 @@
-enum Category{
+enum SearchCategory{
     business,
     entertainment,
     general,
