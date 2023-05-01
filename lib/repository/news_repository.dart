@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:news_app/news_model/category.dart';
 
 import '../news_model/news.dart';
@@ -9,18 +7,9 @@ import '../news_model/request.dart';
 import 'package:http/http.dart' as http;
 
 class NewsRepository {
-  String? apiKey;
+  String apiKey;
 
-  NewsRepository.withKey(this.apiKey);
-
-  NewsRepository() {
-    if (String.fromEnvironment('API_KEY').isEmpty) {
-      if (dotenv.isInitialized) {
-        apiKey = dotenv.env['API_KEY'] ?? 'key';
-      }
-      throw FlutterError('No API key is specified');
-    }
-  }
+  NewsRepository({this.apiKey = '73e1a5bdd8f44bd78ce06c457b301a3e'});
 
   Future<List<NewsModel>> getNews(SearchParameters r) async {
     List<NewsModel> listOfNews = [];
