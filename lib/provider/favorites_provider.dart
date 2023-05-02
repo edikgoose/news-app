@@ -1,17 +1,15 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:news_app/news_model/news.dart';
 
 part 'favorites_provider.freezed.dart';
 
 @freezed
 abstract class FavNewsState with _$FavNewsState {
   const factory FavNewsState({
-    @Default([]) List<NewsModel> favorites,
+    @Default([]) List<Map<String, bool>> favorites,  // List<Map<newsUid, like>>
     @Default(true) isLoading,
   }) = _FavNewsState;
 
@@ -42,15 +40,17 @@ class FavNewsNotifier extends StateNotifier<FavNewsState> {
     if (_uid != null && _db != null) {
       try {
         final collection = await _db!.doc(_uid).collection("favorites").get();
-        final snapshot = collection.docs.map((doc) => doc.data()).toList();
+        final data = collection.docs.map((doc) => doc.data()).toList();
 
-        if (snapshot.isNotEmpty) {
-          // List<dynamic> jsonFav = json.decode(jsonEncode(snapshot.));
-          // List<String> tempFav = jsonFav.map((e) => e.toString()).toList();
-          
-          state = state.copyWith(favorites: snapshot);
+        if (data.isNotEmpty) {
+
+          List<Map<String, bool>> tempList = [];
+          for (var item in data) {
+            tempList.add({'value': item['value']});
+          }
+
+          state = state.copyWith(favorites: tempList);
         } else {
-          _updateDb([]);
           state = state.copyWith(favorites: []);
         }
       } on FirebaseAuthException catch (err) {
@@ -81,43 +81,21 @@ class FavNewsNotifier extends StateNotifier<FavNewsState> {
     }
   }
 
-  void _updateDb(List<NewsModel> news) {
-    if (_uid != null && _db != null) {
-      try {
-        _db!.doc(_uid).collection("favorites").
-        update({"user_favorites": news});
-      } on FirebaseAuthException catch (err) {
-        if (kDebugMode) {
-          print(err);
-        }
-      }
-    } else {
-      if (kDebugMode) {
-        print("user or db are not defined");
-      }
-    }
+  void toggleFavorite(String newsUid) {
+    state = state.copyWith(isLoading: true);
+    final data = <String, bool>{
+      "like": false,
+    };
+    final collection = _db!.doc(_uid).collection("favorites").doc(newsUid).set(data);
+
+    state = state.copyWith(isLoading: false);
   }
 
-  void toggleFavorite(String value) {
+  void removeFavorite(String newsUid) {
     state = state.copyWith(isLoading: true);
-    List<String> tempFav = [for (final fav in state.favorites) fav];
 
-    if (!tempFav.contains(value)) {
-      tempFav.add(value);
-    }
-    _updateDb(tempFav);
-    state = state.copyWith(isLoading: false, favorites: tempFav);
-  }
+    final collection = _db!.doc(_uid).collection("favorites").doc(newsUid).delete();
 
-  void removeFavorite(String jokeToRem) {
-    state = state.copyWith(isLoading: true);
-    List<String> tempFav = [];
-    for (final fav in state.favorites) {
-      if (fav != jokeToRem) {
-        tempFav.add(fav);
-      }
-    }
-    _updateDb(tempFav);
-    state = state.copyWith(isLoading: false, favorites: tempFav);
+    state = state.copyWith(isLoading: false);
   }
 }
