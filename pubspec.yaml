@@ -27,6 +27,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  cloud_firestore: ^4.5.3
 
 
 dev_dependencies:
@@ -47,4 +48,4 @@ flutter_icons:
 
 flutter:
   uses-material-design: true
-  generate: true 
+  generate: true
