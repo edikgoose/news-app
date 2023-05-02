@@ -26,5 +26,12 @@ class NewsModel {
         url = json['url'],
         content = json['content'],
         urlToImage = json['urlToImage'];
-    // Map<String,dynamic> toJson() => _$NewsModelToJson(this);
+    Map<String, dynamic> toJson() => {
+        'source': source.toJson(),
+        'title': title,
+        "description": description,
+        "url": url,
+        "content": content,
+        "urlToImage": urlToImage,
+      };
 }
