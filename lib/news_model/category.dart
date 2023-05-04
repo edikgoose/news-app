@@ -1,4 +1,4 @@
-enum Category{
+enum SearchCategory{
     business,
     entertainment,
     general,
@@ -7,4 +7,5 @@ enum Category{
     sports,
     technology,
     sources,
+    none,
 }

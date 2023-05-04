@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:news_app/news_model/category.dart';
 
 import 'package:news_app/widgets/news_preview.dart';
 import '../news_model/news.dart';
 import '../news_model/request.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
+import '../repository/news_repository.dart';
 
 part 'news_provider.freezed.dart';
 
@@ -25,15 +26,17 @@ final newsProvider =
     StateNotifierProvider<NewsNotifier, NewsState>((ref) => NewsNotifier());
 
 class NewsNotifier extends StateNotifier<NewsState> {
+  NewsRepository newsRepository = NewsRepository();
+
   NewsNotifier() : super(const NewsState()) {
-    loadNewsList();
+    loadNewsList(SearchParameters(null, '', SearchCategory.none));
   }
 
-  void loadNewsList() async {
+  void loadNewsList(SearchParameters r) async {
     state = state.copyWith(isLoading: true);
     List<NewsModel> newsList = [];
     Future<List<NewsModel>> futureNewsList =
-        fetchNews(Request(null, "trump", null));
+        fetchNews(r);
     futureNewsList.then((value) {
       newsList = value;
     }).whenComplete(() => generateNewsPreview(newsList));
@@ -45,10 +48,10 @@ class NewsNotifier extends StateNotifier<NewsState> {
       if (news[i].content != null) {
         if (news[i].urlToImage == null) {
           news[i].urlToImage =
-              "https://github.com/edikgoose/news-app/tree/main/assets/images";
+              'https://github.com/edikgoose/news-app/tree/main/assets/images';
         }
         if (news[i].description == null) {
-          news[i].description = "";
+          news[i].description = '';
         }
 
         tempNews.add(NewsPreview(newsModel: news[i]));
@@ -61,20 +64,7 @@ class NewsNotifier extends StateNotifier<NewsState> {
     state = state.copyWith(favoritesOnlyFlag: !state.favoritesOnlyFlag);
   }
 
-  Future<List<NewsModel>> fetchNews(Request r) async {
-    List<NewsModel> listOfNews = [];
-    String url = makeRequestString(r);
-    var data = await http.get(Uri.parse(url));
-    if (data.statusCode == 200) {
-      var articles = jsonDecode(data.body)["articles"];
-      if (articles.length > 0) {
-        for (var news in articles) {
-          listOfNews.add(NewsModel.fromJson(news));
-        }
-      }
-      return listOfNews;
-    } else {
-      throw Exception('Loading failed');
-    }
+  Future<List<NewsModel>> fetchNews(SearchParameters r) async {
+    return newsRepository.getNews(r);
   }
 }
