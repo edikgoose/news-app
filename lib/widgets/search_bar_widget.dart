@@ -205,3 +205,4 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
 
 
 }
+}
