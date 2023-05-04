@@ -3,11 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../news_model/category.dart';
 import '../news_model/request.dart';
+import '../news_model/countries.dart';
 
 typedef SearchCallback = void Function(SearchParameters request);
 typedef SettingsCallback = void Function();
 typedef SetCategoryCallback = void Function(SearchCategory category);
-
+typedef SetSearchSettingsCallback = void Function(SearchParameters settings);
 
 class SearchBarWidget extends ConsumerStatefulWidget {
   final SearchCallback searchRequestCallback;
@@ -22,6 +23,7 @@ class SearchBarWidget extends ConsumerStatefulWidget {
 class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
   String _content = '';
   SearchCategory _category = SearchCategory.none;
+  Country? _country;
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -71,9 +73,11 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
               fit: FlexFit.tight,
               child: IconButton(
                 onPressed: () {
-                  _showCategoryChoiceDialog((category) {
-                    _category = category;
-                    widget.searchRequestCallback(SearchParameters(null, _content, _category));
+                  _showSearchSettingsDialog((settings) {
+                    _category = settings.category!;
+                    _country = settings.country;
+                    _content = settings.query;
+                    widget.searchRequestCallback(SearchParameters(_country, _content, _category));
                   });
                 },
                 icon: const Icon(Icons.settings_outlined),
@@ -86,20 +90,91 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
     );
   }
 
-  Future<void> _showCategoryChoiceDialog(SetCategoryCallback setCategoryCallback) async {
-    await showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog( // <-- SEE HERE
-            title: const Text('Select category'),
-            children: SearchCategory.values.map((category) => SimpleDialogOption(
-              onPressed: () {
-                Navigator.of(context).pop();
-                setCategoryCallback(category);
-              },
-              child: Text(category.name),
-            )).toList()
-          );
-        });
+  // need to write a function that will show a dialog with a list of categories and language
+  // and will return a SearchParameters object
+  Future<void> _showSearchSettingsDialog(SetSearchSettingsCallback setSearchSettingsCallback) async {
+    SearchCategory selectedCategory = _category;
+    Country? selectedCountry = _country;
+    String content = _content;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Select category and language',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Text(
+                          'Category',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        const SizedBox(height: 8),
+                        ...SearchCategory.values.map((category) => RadioListTile(
+                          title: Text(category.name),
+                          value: category,
+                          groupValue: selectedCategory,
+                          onChanged: (SearchCategory? value) {
+                            setState(() {
+                              selectedCategory = value!;
+                            });
+                          },
+                        )).toList(),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Language',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        const SizedBox(height: 8),
+                        ...Country.values.map((language) => RadioListTile(
+                          title: Text(language.name),
+                          value: language,
+                          groupValue: selectedCountry,
+                          onChanged: (Country? value) {
+                            setState(() {
+                              selectedCountry = value!;
+                            });
+                          },
+                        )).toList(),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      setSearchSettingsCallback(SearchParameters(selectedCountry, content, selectedCategory));
+                    },
+                    child: const Text('Save'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
+
+
 }
