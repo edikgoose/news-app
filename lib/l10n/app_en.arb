@@ -1,0 +1,48 @@
+{
+  "searchNews": "Search News",
+  "@searchNews": {
+    "description": "Search news widget text"
+  },
+  "selectCategory": "Select category",
+  "@selectCategory": {
+    "description": "select category text"
+  },
+  "business": "business",
+  "@business": {
+    "description": "business category enum"
+  },
+  "entertainment": "entertainment",
+  "@entertainment": {
+    "description": "entertainment category enum"
+  },
+  "general": "general",
+  "@general": {
+    "description": "general category enum"
+  },
+  "health": "health",
+  "@health": {
+    "description": "health category enum"
+  },
+  "science": "science",
+  "@science": {
+    "description": "science category enum"
+  },
+  "sports": "sports",
+  "@sports": {
+    "description": "sports category enum"
+  },
+  "technology": "technology",
+  "@technology": {
+    "description": "technology category enum"
+  },
+  "sources": "sources",
+  "@sources": {
+    "description": "sources category enum"
+  },
+  "none": "none",
+  "@none": {
+    "description": "none category enum"
+  }
+}
+
+  

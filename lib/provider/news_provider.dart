@@ -47,8 +47,9 @@ class NewsNotifier extends StateNotifier<NewsState> {
     for (var i = 0; i < news.length; i++) {
       if (news[i].content != null) {
         if (news[i].urlToImage == null) {
+
           news[i].urlToImage =
-              'https://github.com/edikgoose/news-app/tree/main/assets/images';
+              'https://raw.githubusercontent.com/edikgoose/news-app/%2326/assets/images/no_picture.png';
         }
         if (news[i].description == null) {
           news[i].description = '';

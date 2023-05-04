@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../news_model/category.dart';
 import '../news_model/request.dart';
 
@@ -24,6 +24,18 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
   SearchCategory _category = SearchCategory.none;
   @override
   Widget build(BuildContext context) {
+     final searchCategoriesLocales = {
+      'business': AppLocalizations.of(context)!.business,
+      'entertainment': AppLocalizations.of(context)!.entertainment,
+      'general': AppLocalizations.of(context)!.general,
+    'health': AppLocalizations.of(context)!.health,
+    'science': AppLocalizations.of(context)!.science,
+    'sports': AppLocalizations.of(context)!.sports,
+    'technology': AppLocalizations.of(context)!.technology,
+    'sources': AppLocalizations.of(context)!.sources,
+    'none': AppLocalizations.of(context)!.none,
+     };
+    
     return Flexible(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
@@ -40,10 +52,10 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
                 padding: const EdgeInsets.only(bottom: 1),
                 child: TextField(
                   textInputAction: TextInputAction.search,
-                  decoration: const InputDecoration(
+                  decoration:  InputDecoration(
                       contentPadding: EdgeInsets.all(10.0),
                       border: InputBorder.none,
-                      hintText: 'Search News'),
+                      hintText: AppLocalizations.of(context)!.searchNews,),
                   style: const TextStyle(fontSize: 12),
                   onChanged: (value) {
                     setState(() {
@@ -74,7 +86,7 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
                   _showCategoryChoiceDialog((category) {
                     _category = category;
                     widget.searchRequestCallback(SearchParameters(null, _content, _category));
-                  });
+                  }, searchCategoriesLocales);
                 },
                 icon: const Icon(Icons.settings_outlined),
                 padding: EdgeInsets.zero,
@@ -86,18 +98,18 @@ class _ConsumerSearchBarState extends ConsumerState<SearchBarWidget> {
     );
   }
 
-  Future<void> _showCategoryChoiceDialog(SetCategoryCallback setCategoryCallback) async {
+  Future<void> _showCategoryChoiceDialog(SetCategoryCallback setCategoryCallback, Map<String, String> map) async {
     await showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog( // <-- SEE HERE
-            title: const Text('Select category'),
+            title: Text(AppLocalizations.of(context)!.selectCategory),
             children: SearchCategory.values.map((category) => SimpleDialogOption(
               onPressed: () {
                 Navigator.of(context).pop();
                 setCategoryCallback(category);
               },
-              child: Text(category.name),
+              child: Text(map[category.name]!),
             )).toList()
           );
         });

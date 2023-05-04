@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/constants/colors.dart';
+import 'package:news_app/provider/theme_provider.dart';
 
 import '../news_model/user.dart';
+import '../provider/locale_provider.dart';
 import '../widgets/info_field_widget.dart';
 import 'auth_page.dart';
 
+
+bool theme = false;
 class ProfilePage extends ConsumerWidget {
   final UserModel user;
+  
 
   const ProfilePage({required this.user, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final curLocale = ref.watch(localeProvider).locale;
+  
     return Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
@@ -73,6 +80,55 @@ class ProfilePage extends ConsumerWidget {
               InfoCard(text: user.phone, icon: Icons.phone),
               InfoCard(text: user.nickname, icon: Icons.perm_identity),
               InfoCard(text: user.mail, icon: Icons.email),
+              SizedBox(
+              width: 100,
+              height: 30,
+              child: ElevatedButton(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.language,
+                      size: 24.0,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                      height: 30,
+                    ),
+                    Text(curLocale.languageCode),
+                  ],
+                ),
+                onPressed: () {
+                  ref.read(localeProvider.notifier).changeLocale();
+                },
+              ),
+            ),
+            SizedBox(
+              width: 100,
+              height: 30,
+              child: ElevatedButton(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      theme ? Icons.dark_mode : Icons.light_mode,
+                      size: 24.0,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                      height: 30,
+                    ),
+                    Text(curLocale.languageCode),
+                  ],
+                ),
+                onPressed: () {
+                  ref.read(themeProvider.notifier).toggle();
+                  theme = !theme;
+                },
+              ),
+            ),
             ],
           ),
         ));
