@@ -1,0 +1,13 @@
+{
+    "searchNews": "Поиск новостей",
+    "selectCategory": "Выберете категорию",
+    "business": "бизнес",
+    "entertainment": "развлечения",
+    "general": "общее",
+    "health": "здоровье",
+    "science": "наука",
+    "sports": "спорт",
+    "technology": "технологии",
+    "sources": "источники",
+    "none": "нет"
+}
