@@ -42,8 +42,7 @@ class MyApp extends ConsumerWidget {
       title: 'News App',
       theme: ThemeData(
           useMaterial3: true,
-          // colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(35, 34, 39, 0.612)),
-                    colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(238, 232, 232, 0.963)),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(35, 34, 39, 0.612)),
 
         ),
         // darkTheme: ThemeData.dark(),
