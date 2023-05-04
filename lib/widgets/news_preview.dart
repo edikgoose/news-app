@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:news_app/news_model/news.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,12 +38,7 @@ class NewsPreview extends ConsumerWidget {
             children: <Widget>[
               ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: Image.network(
-                  newsModel.urlToImage!, // TODO check for null
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                ),
+                child: loadPicture(context, newsModel.urlToImage!)
               ),
               const SizedBox(
                 height: 12,
@@ -72,6 +69,36 @@ class NewsPreview extends ConsumerWidget {
       ),
     );
   }
+}
+Image loadPicture(context, String url){
+  Image img;
+  
+  try{
+  img = Image.network(
+                  url, // TODO check for null
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                );
+  }on TlsException catch(err){
+    print(err);
+    img = Image.network(
+                  "https://raw.githubusercontent.com/edikgoose/news-app/main/assets/images/no_picture.png", // TODO check for null
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                );
+  }on Error catch (err){
+    print(err);
+    img = Image.network(
+                  "https://raw.githubusercontent.com/edikgoose/news-app/main/assets/images/no_picture.png", // TODO check for null
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                );
+  }
+  return img;
+
 }
 
 Route _createRoute(NewsModel newsModel) {
