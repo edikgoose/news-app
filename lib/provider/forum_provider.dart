@@ -9,14 +9,14 @@ part 'forum_provider.freezed.dart';
 
 @freezed
 abstract class ForumNewsState with _$ForumNewsState {
-  const factory FavNewsState({
-    @Default([]) Map<String, Map<String, String>> newsContent,  // Map<newUid, Map<title, String>>
-    @Default([]) Map<String, Map<String, List<String>>> comments,  // Map<newsUid, Map<name, comments>>
-    @Default([]) Map<String, int> likes,  // Map<newsUid, numberOfLikes>
+  const factory ForumNewsState({
+    @Default({}) Map<String, Map<String, String>> newsContent,  // Map<newUid, Map<title, String>>
+    @Default({}) Map<String, Map<String, List<String>>> comments,  // Map<newsUid, Map<name, comments>>
+    @Default({}) Map<String, int> likes,  // Map<newsUid, numberOfLikes>
     @Default(true) isLoading,
   }) = _ForumNewsState;
 
-  const FavNewsState._();
+  const ForumNewsState._();
 }
 
 final forumNewsProvider = StateNotifierProvider<ForumNewsNotifier, ForumNewsState>(
@@ -38,15 +38,20 @@ class ForumNewsNotifier extends StateNotifier<ForumNewsState> {
 
   void getNews(String newsid) {
     state = state.copyWith(isLoading: true);
-
-    final data = _db!.doc(newsid).get();
-
-    // TODO parse data
-
-    state = state.copyWith(isLoading: false);
+    final docRef = _db!.doc(newsid);
+    Map<String, String> data;
+    Map<String, Map<String, String>> tempNewsContent = Map.of(state.newsContent);
+    docRef.get().then(
+    (DocumentSnapshot doc) {
+    data = doc.data() as Map<String, String>;
+    tempNewsContent[newsid] = data;
+    },
+    onError: (e) => print("Error getting document: $e"),
+    ).whenComplete(() =>  state = state.copyWith(isLoading: false, newsContent: tempNewsContent) );
   }
 
   void addNews(String newsId, NewsModel model){
+    final data = model.toJson();
 
     // TODO parse model and add data
     final collection = _db!.doc(newsId).set(data);
