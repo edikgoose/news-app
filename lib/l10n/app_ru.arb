@@ -1,6 +1,6 @@
 {
     "searchNews": "Поиск новостей",
-    "selectCategory": "Выберете категорию",
+    "selectCategory": "Выберете категорию и язык", 
     "business": "бизнес",
     "entertainment": "развлечения",
     "general": "общее",
@@ -9,5 +9,8 @@
     "sports": "спорт",
     "technology": "технологии",
     "sources": "источники",
-    "none": "нет"
+    "none": "нет",
+    "category": "Категория",
+    "language": "Язык",
+    "save": "Сохранить"
 }

@@ -3,7 +3,7 @@
   "@searchNews": {
     "description": "Search news widget text"
   },
-  "selectCategory": "Select category",
+  "selectCategory": "Select category and language",
   "@selectCategory": {
     "description": "select category text"
   },
@@ -42,6 +42,18 @@
   "none": "none",
   "@none": {
     "description": "none category enum"
+  },
+  "category": "Category",
+  "@category": {
+    "description": "category text"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "language text"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "save text"
   }
 }
 
