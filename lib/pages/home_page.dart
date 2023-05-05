@@ -18,7 +18,7 @@ class MyHomePage extends ConsumerWidget {
     final con = ref.watch(connectivityStatusProviders).curStatus;
     ref.read(connectivityStatusProviders.notifier).checkConnection();
 
-    if (con == Statuses.isDisonnected || con == Statuses.notDetermined) {
+    if (con == Statuses.isDisonnected) {
       disposed = true;
       return Scaffold(
           backgroundColor: AppColors.background,
