@@ -44,7 +44,7 @@ class NewsRepository {
       params['category'] = r.category!.name;
     }
     if (r.country != null){
-      params['country'] = r.country.toString();
+      params['country'] = r.country!.name;
     }
 
     return Uri.https(authority, path, params).toString();

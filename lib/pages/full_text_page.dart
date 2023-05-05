@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/constants/colors.dart';
 import 'package:news_app/news_model/news.dart';
+import 'package:news_app/widgets/news_preview.dart';
 
 class FullTextPage extends ConsumerWidget {
   final NewsModel newsModel;
@@ -52,12 +53,7 @@ class FullTextPage extends ConsumerWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(6),
-                    child: Image.network(
-                      newsModel.urlToImage!,
-                      height: 200,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                    ),
+                    child: loadPicture(context, newsModel.urlToImage!)
                   ),
                 ),
               Padding(
