@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:news_app/news_model/news.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,8 +35,8 @@ class NewsPreview extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: loadPicture(context, newsModel.urlToImage!)
+                  borderRadius: BorderRadius.circular(6),
+                  child: loadPicture(context, newsModel.urlToImage!)
               ),
               const SizedBox(
                 height: 12,
@@ -70,41 +68,52 @@ class NewsPreview extends ConsumerWidget {
     );
   }
 }
-Image loadPicture(context, String url){
+
+Image loadPicture(context, String url) {
   Image img;
-  
-  try{
-  img = Image.network(
-                  url, // TODO check for null
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                );
-  }on TlsException catch(err){
+
+  try {
+    img = Image.network(
+      url,
+      height: 200,
+      width: MediaQuery.of(context).size.width,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          color: Colors.amber,
+          alignment: Alignment.center,
+          child: Image.network(
+                "https://raw.githubusercontent.com/edikgoose/news-app/main/assets/images/no_picture.png",
+                height: 200,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover)
+        );
+      },
+    );
+  } on Exception catch (err) {
     print(err);
     img = Image.network(
-                  "https://raw.githubusercontent.com/edikgoose/news-app/main/assets/images/no_picture.png", // TODO check for null
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                );
-  }on Error catch (err){
+      "https://raw.githubusercontent.com/edikgoose/news-app/main/assets/images/no_picture.png",
+      height: 200,
+      width: MediaQuery.of(context).size.width,
+      fit: BoxFit.cover,
+    );
+  } on Error catch (err) {
     print(err);
     img = Image.network(
-                  "https://raw.githubusercontent.com/edikgoose/news-app/main/assets/images/no_picture.png", // TODO check for null
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                );
+      "https://raw.githubusercontent.com/edikgoose/news-app/main/assets/images/no_picture.png",
+      height: 200,
+      width: MediaQuery.of(context).size.width,
+      fit: BoxFit.cover,
+    );
   }
   return img;
-
 }
 
 Route _createRoute(NewsModel newsModel) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
-          FullTextPage(newsModel: newsModel),
+        FullTextPage(newsModel: newsModel),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(1.0, 0.0);
       const end = Offset.zero;

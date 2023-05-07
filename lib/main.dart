@@ -4,13 +4,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:news_app/constants/colors.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:news_app/pages/auth_page.dart';
 import 'package:news_app/provider/locale_provider.dart';
 import 'package:news_app/provider/theme_provider.dart';
 import 'firebase_options.dart';
-import 'pages/home_page.dart';
 
 
 void main() async {
@@ -36,7 +35,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final curLocale = ref.watch(localeProvider).locale;
-    var theme = ref.watch(themeProvider);
+    ref.watch(themeProvider);
 
     return MaterialApp(
       title: 'News App',
@@ -58,7 +57,7 @@ class MyApp extends ConsumerWidget {
         Locale('ru'),
       ],
       locale: curLocale,
-      home: MyHomePage(),
+      home: AuthPage(),
     );
   }
 }
