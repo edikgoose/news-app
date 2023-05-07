@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/constants/colors.dart';
-import 'package:news_app/provider/theme_provider.dart';
 
 import '../news_model/user.dart';
 import '../provider/locale_provider.dart';
@@ -12,14 +12,14 @@ import 'auth_page.dart';
 bool theme = false;
 class ProfilePage extends ConsumerWidget {
   final UserModel user;
-  
+
 
   const ProfilePage({required this.user, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final curLocale = ref.watch(localeProvider).locale;
-  
+
     return Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
@@ -61,7 +61,7 @@ class ProfilePage extends ConsumerWidget {
               //   backgroundImage: AssetImage('assets/images/app_icon.png'),
               // ),
               Text(
-                '${user.name} ${user.surname}',
+                'User',
                 style: const TextStyle(
                   fontSize: 40.0,
                   color: Colors.white,
@@ -77,8 +77,8 @@ class ProfilePage extends ConsumerWidget {
                 ),
               ),
 
-              InfoCard(text: user.phone, icon: Icons.phone),
-              InfoCard(text: user.nickname, icon: Icons.perm_identity),
+              // InfoCard(text: user.phone, icon: Icons.phone),
+              // InfoCard(text: user.nickname, icon: Icons.perm_identity),
               InfoCard(text: user.mail, icon: Icons.email),
               SizedBox(
               width: 100,
@@ -104,31 +104,31 @@ class ProfilePage extends ConsumerWidget {
                 },
               ),
             ),
-            SizedBox(
-              width: 100,
-              height: 30,
-              child: ElevatedButton(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      theme ? Icons.dark_mode : Icons.light_mode,
-                      size: 24.0,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                      height: 30,
-                    ),
-                    Text(curLocale.languageCode),
-                  ],
-                ),
-                onPressed: () {
-                  ref.read(themeProvider.notifier).toggle();
-                  theme = !theme;
-                },
-              ),
-            ),
+            // SizedBox(
+            //   width: 100,
+            //   height: 30,
+            //   child: ElevatedButton(
+            //     child: Row(
+            //       mainAxisSize: MainAxisSize.max,
+            //       mainAxisAlignment: MainAxisAlignment.start,
+            //       children: [
+            //         Icon(
+            //           theme ? Icons.dark_mode : Icons.light_mode,
+            //           size: 24.0,
+            //         ),
+            //         const SizedBox(
+            //           width: 5,
+            //           height: 30,
+            //         ),
+            //         Text(curLocale.languageCode),
+            //       ],
+            //     ),
+            //     onPressed: () {
+            //       ref.read(themeProvider.notifier).toggle();
+            //       theme = !theme;
+            //     },
+            //   ),
+            // ),
             ],
           ),
         ));
@@ -136,7 +136,7 @@ class ProfilePage extends ConsumerWidget {
 
   Route _createRouteAuth() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const AuthPage(),
+      pageBuilder: (context, animation, secondaryAnimation){ FirebaseAuth.instance.signOut(); return AuthPage();},
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(-1.0, 0.0);
         const end = Offset.zero;

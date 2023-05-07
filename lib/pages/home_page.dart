@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/constants/colors.dart';
@@ -90,8 +91,8 @@ class MyHomePage extends ConsumerWidget {
 Route _createRouteProfile() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => ProfilePage(
-        user: UserModel('Name', 'Surname', 'alias', '+77777777777',
-            'mail@gmail.com')),
+        user: UserModel("Name", 'Surname', 'alias', '+77777777777',
+            FirebaseAuth.instance.currentUser!.email.toString())),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(-1.0, 0.0);
       const end = Offset.zero;
